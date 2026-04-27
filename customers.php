@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['MaNV'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+<?php
 // Tệp tin: customers.php (Quản lý Khách hàng)
 require_once 'db_connect.php';
 
@@ -86,14 +93,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="customers.php">Khách hàng</a>
+          <a class="nav-link" href="index.php">Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="customers.php">Khách hàng</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="transactions.php">Giao dịch</a>
         </li>
+        <?php if (isset($_SESSION['Role']) && $_SESSION['Role'] === 'QuanLy'): ?>
+        <li class="nav-item">
+          <a class="nav-link" href="employees.php">Nhân viên</a>
+        </li>
+        <?php endif; ?>
       </ul>
+      
+      <div class="d-flex text-white align-items-center">
+        <span class="me-3">
+          <i class="bi bi-person-circle"></i> Xin chào, 
+          <strong><?= htmlspecialchars($_SESSION['TenNV'] ?? 'Khách') ?></strong> 
+          (<?= htmlspecialchars($_SESSION['Role'] ?? '') ?>)
+        </span>
+        <a href="logout.php" class="btn btn-sm btn-danger">
+          <i class="bi bi-box-arrow-right"></i> Đăng xuất
+        </a>
+      </div>
     </div>
   </div>
 </nav>
